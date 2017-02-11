@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 	Advanced Product list
 	Author: Reemon
@@ -29,7 +29,7 @@ class ControllerModuleProductFilter extends Controller {
 			if($modal) {
 				$paypal = $this->model_setting_setting->getSetting("advanced_product_filter");
 				$this->request->post['paypal'] = isset($paypal['advanced_product_filter_paypal']) ? $paypal['advanced_product_filter_paypal'] : true;
-			}	
+			}
 
 			if($this->model_module_product_filter->editFilterFields($this->request->post)) {
 				$this->session->data['success'] = $this->language->get('text_success');
@@ -107,7 +107,7 @@ class ControllerModuleProductFilter extends Controller {
 
 		if($modal) {
 			$data['action'] = $this->url->link('module/product_filter', 'token=' . $this->session->data['token'].'&mode=modal', 'SSL');
-			$view = 'module/advanced_filter/product_filter_modal.tpl';
+			$view = 'module/advanced_filter/product_filter_modal';
 			$this->response->setOutput($this->load->view($view, $data));
 			return;
 		}
@@ -117,7 +117,7 @@ class ControllerModuleProductFilter extends Controller {
 		$paypal = $this->model_setting_setting->getSetting("advanced_product_filter");
 		$data['paypal_enabled'] = isset($paypal['advanced_product_filter_paypal']) ? $paypal['advanced_product_filter_paypal'] : true;
 
-		$view = 'module/advanced_filter/product_filter.tpl';
+		$view = 'module/advanced_filter/product_filter';
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -140,7 +140,7 @@ class ControllerModuleProductFilter extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('heading_title'),
-			'href'      => $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'] . $this->filter_url, 'SSL'),       		
+			'href'      => $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'] . $this->filter_url, 'SSL'),
 			'last' 		=> true
 		);
 
@@ -152,11 +152,11 @@ class ControllerModuleProductFilter extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$data['heading_title'] = $this->language->get('heading_title');			
+		$data['heading_title'] = $this->language->get('heading_title');
 
-		$data['button_copy'] = $this->language->get('button_copy');		
-		$data['button_add'] = $this->language->get('button_add');		
-		$data['button_delete'] = $this->language->get('button_delete');		
+		$data['button_copy'] = $this->language->get('button_copy');
+		$data['button_add'] = $this->language->get('button_add');
+		$data['button_delete'] = $this->language->get('button_delete');
 		$data['button_filter'] = $this->language->get('button_filter');
 
 		$data['count_selected_text'] = $this->language->get('count_selected_text');
@@ -227,8 +227,8 @@ class ControllerModuleProductFilter extends Controller {
 			$data['rules'] = $rules;
 			$data['inputs'] = $inputs;
 
-			$save = true;		
-		} 
+			$save = true;
+		}
 
 		$advancedFilter->refresh($this->registry);
 
@@ -245,16 +245,16 @@ class ControllerModuleProductFilter extends Controller {
 			'filter' => true,
 			'sort' => $sort,
 		);
-		
+
 		$data['limit_per_page'] = $limit;
-		$data['product_table'] = $this->getProductTable($advancedFilter, $filterData);	
+		$data['product_table'] = $this->getProductTable($advancedFilter, $filterData);
 
 		$data['paypal_button'] = $this->getPayPalDonateButton();
 
 		$advancedFilter->clean();
 
-		if($save) {	
-			unset($this->session->data['advanced_filter']);		
+		if($save) {
+			unset($this->session->data['advanced_filter']);
 			$this->session->data['advanced_filter'] = $advancedFilter;
 		}
 
@@ -284,7 +284,7 @@ class ControllerModuleProductFilter extends Controller {
 			'filter' => true,
 			'sort' => array(),
 		);
-	
+
 		if(isset($this->request->post['limit']) && is_numeric($this->request->post['limit']) && $this->request->post['limit'] > 0) {
 			$data['limit'] =  (int)$this->request->post['limit'];
 			$advancedFilter->setLimitPerPage($data['limit']);
@@ -293,14 +293,14 @@ class ControllerModuleProductFilter extends Controller {
 		if(isset($this->request->post['page']) && is_numeric($this->request->post['page'])) {
 			$data['page'] = (int)$this->request->post['page'];
 			$data['start'] = ($data['page'] - 1) * $data['limit'];
-			$advancedFilter->setPage($data['page']);			
+			$advancedFilter->setPage($data['page']);
 		}
 
 		if(isset($this->request->post['sort']) && isset($this->request->post['sort_type'])) {
 			$data['sort'] = array(
 				'type' => $this->request->post['sort_type'],
 				'fields' => $this->request->post['sort'],
-			);	
+			);
 		}
 		$advancedFilter->setSortBy($data['sort']);
 
@@ -350,7 +350,7 @@ class ControllerModuleProductFilter extends Controller {
 		if(isset($this->request->post['page']) && is_numeric($this->request->post['page'])) {
 			$data['page'] = (int)$this->request->post['page'];
 			$data['start'] = ($data['page'] - 1) * $data['limit'];
-			$advancedFilter->setPage($data['page']);			
+			$advancedFilter->setPage($data['page']);
 		}
 
 		if(isset($this->request->post['sort']) && isset($this->request->post['sort_type'])) {
@@ -379,7 +379,7 @@ class ControllerModuleProductFilter extends Controller {
 	private function getProductTable($advancedFilter, $data) {
 		$this->language->load('catalog/product');
 
-		/*Get filtered products*/		
+		/*Get filtered products*/
 		$products = $this->getListOfProducts($advancedFilter,$data);
 
 		/*Pagination*/
@@ -391,13 +391,13 @@ class ControllerModuleProductFilter extends Controller {
 		$pagination->url = '{page}';
 		$pagination = $pagination->render();
 
-		$tableBuilder = new ProductTableBuilder(); 
+		$tableBuilder = new ProductTableBuilder();
 		$tableBuilder->setFormAction($this->url->link('catalog/product/delete', 'token=' . $this->session->data['token'], 'SSL'));
 
 		$order_type = '';
 		if(isset($data['sort']['type'])) {
 			$order_type = $data['sort']['type'];
-		} 
+		}
 
 		/*Dynamic header*/
 		$shownColumns = $advancedFilter->getShownColumns();
@@ -409,8 +409,8 @@ class ControllerModuleProductFilter extends Controller {
 			}
 			$tableBuilder->addHeaderColumn($this->language->get('column_' . $key), false, false, '');
 		}
-		/*End of dynamic header, start table body*/   
-		
+		/*End of dynamic header, start table body*/
+
 		$products = $products['products'];
 		if ($products) {
 		    foreach ($products as $product) {
@@ -424,7 +424,7 @@ class ControllerModuleProductFilter extends Controller {
 		        	}
 
 		        	$tableBuilder->addCustomColumn($inlineEdit, $key, isset($product[$key]) ? $product[$key] : null);
-		        } 
+		        }
 
 		    	$tableBuilder->endOfProductRecord();
 		    }
@@ -450,8 +450,8 @@ class ControllerModuleProductFilter extends Controller {
 		$products = $products['products'];
 
 		//Get shown columns
-		$shownColumns = $advancedFilter->getShownColumns();	
-		
+		$shownColumns = $advancedFilter->getShownColumns();
+
 		//Returned list of products
 		$listOfProducts = array();
 
@@ -504,7 +504,7 @@ class ControllerModuleProductFilter extends Controller {
 						if (($product_special['date_start'] == '0000-00-00' || $product_special['date_start'] < date('Y-m-d')) && ($product_special['date_end'] == '0000-00-00' || $product_special['date_end'] > date('Y-m-d'))) {
 							$temp[$key] = $product_special['price'];
 							break;
-						}					
+						}
 					}
 				}*/
 			}
@@ -513,7 +513,7 @@ class ControllerModuleProductFilter extends Controller {
 			$temp['action'] = $action;
 
 			//Save record to the list
-			$listOfProducts[] = $temp;			
+			$listOfProducts[] = $temp;
 		}
 
 		//Return altered list of products and total number of filtered products
@@ -616,7 +616,7 @@ class ControllerModuleProductFilter extends Controller {
 		}
 
 		$productId = (int)$productId;
-		
+
 		if(is_float($content)) {
 			$content = (float)$content;
 		}elseif(is_integer($content)) {
@@ -670,12 +670,12 @@ class ControllerModuleProductFilter extends Controller {
 		$advancedFilter->refresh($this->registry);
 
 		if (isset($this->request->get['limit'])) {
-			$limit = $this->request->get['limit'];	
+			$limit = $this->request->get['limit'];
 		} else {
-			$limit = 20;	
+			$limit = 20;
 		}
 
-		$inputs = $advancedFilter->getInputs();	
+		$inputs = $advancedFilter->getInputs();
 
 		foreach ($inputs as $id => $input) {
 			if(!isset($this->request->get[$id]) || !$input->isAutocomplete() || !$advancedFilter->updateInputs($this->request->get)) {
@@ -690,7 +690,7 @@ class ControllerModuleProductFilter extends Controller {
 				$json[] = array(
 					'product_id' => $product['product_id'],
 					$column => $product[$column]
-				);	
+				);
 			}
 		}
 
@@ -701,14 +701,13 @@ class ControllerModuleProductFilter extends Controller {
 		if (!$this->user->hasPermission('modify', 'module/product_filter')) {
 			$this->session->data['warning'] = $this->language->get('error_permission');
 			return false;
-		}	
+		}
 
-		return true;	
+		return true;
 	}
 
 	public function install() {
 		$this->load->model('module/product_filter');
-
 		$this->model_module_product_filter->createTable();
 	}
 
