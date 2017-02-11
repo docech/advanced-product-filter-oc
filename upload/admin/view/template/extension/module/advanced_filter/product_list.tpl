@@ -27,9 +27,9 @@
       <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
     <?php } ?>
-  
-    <div id="notification"></div>  
-    
+
+    <div id="notification"></div>
+
     <div class="btn-toolbar pull-left" role="toolbar">
       <div class="btn-group">
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#product-filter-setting-modal"><?php echo $button_filter_setting; ?></button>
@@ -46,8 +46,8 @@
     <script src="view/javascript/jquery.multiple.select.js"></script>
     <?php if($advanced_filter) { ?>
       <div class="product-filter">
-        <?php echo $advanced_filter->renderInputs($token); ?>         
-      </div> 
+        <?php echo $advanced_filter->renderInputs($token); ?>
+      </div>
 
       <div class="filter-panel">
         <a id="advanced-filter-button" class="btn btn-success"><?php echo $button_filter; ?></a>
@@ -57,8 +57,8 @@
             <option value="ASC"><?php echo $asc_text; ?></option>
             <option value="DESC"><?php echo $desc_text; ?></option>
         </select>
-        <input id="products-per-page" name="products-per-page" type="text" value="<?php echo $limit_per_page; ?>" /> 
-      </div>     
+        <input id="products-per-page" name="products-per-page" type="text" value="<?php echo $limit_per_page; ?>" />
+      </div>
     <?php } ?>
 
     <div id="products">
@@ -110,10 +110,10 @@
 
   $('#product-filter-setting-modal').on('show.bs.modal', function (e) {
     $.ajax({
-      url: 'index.php?route=module/product_filter&mode=modal&token=<?php echo $token; ?>',
-      type: 'get', 
-      dataType: 'html',      
-      success: function(html) { 
+      url: 'index.php?route=extension/module/product_filter&mode=modal&token=<?php echo $token; ?>',
+      type: 'get',
+      dataType: 'html',
+      success: function(html) {
         $('#product-filter-setting-modal').html(html);
       }
     });
@@ -156,14 +156,14 @@
       $('#advanced-filter-button').click(function(e) {
         if(!self.paginationClick) {
           self.page = 1;
-        } 
+        }
         self.paginationClick = false;
 
         var filter_data = $.param($('.product-filter select, .product-filter input[type=text], .product-filter input[type=checkbox]:checked, .product-filter input[type=radio]:checked, input[name*=\'sort\']:checked, #product-sort-type')) + '&page=' + self.page + '&limit=' + $('#products-per-page').val();
         $.ajax({
-          url: 'index.php?route=module/product_filter/filterProducts&token=<?php echo $token; ?>',
+          url: 'index.php?route=extension/module/product_filter/filterProducts&token=<?php echo $token; ?>',
           type: 'post',
-          data: filter_data,  
+          data: filter_data,
           dataType: 'json',
           beforeSend: function() {
             $('#products').hide();
@@ -172,8 +172,8 @@
           complete: function() {
             $('#products').show();
             $('.wait').remove();
-          },        
-          success: function(json) { 
+          },
+          success: function(json) {
             $('#notification .warning').remove();
 
             if(json == null) {
@@ -181,7 +181,7 @@
             } else if(json['error']) {
               $('#notification').html('<div class="warning">' + json['error'] + '</div>');
             } else {
-              $('#products').html(json); 
+              $('#products').html(json);
               $("html, body").animate({scrollTop: $(".filter-panel").offset().top}, "slow");
             }
           }
@@ -209,7 +209,7 @@
       $('#column-show').on('change', function() {
         var selected = $('#column-show').val();
         $.ajax({
-          url: 'index.php?route=module/product_filter/changeShownColumns&token=<?php echo $token; ?>',
+          url: 'index.php?route=extension/module/product_filter/changeShownColumns&token=<?php echo $token; ?>',
           type: 'post',
           data: {columns_shown: selected, page: self.page, limit: $('#products-per-page').val()},
           dataType: 'json',
@@ -221,7 +221,7 @@
             } else if(json['error']) {
               $('#notification').html('<div class="warning">' + json['error'] + '</div>');
             } else {
-              $('#products').html(json); 
+              $('#products').html(json);
 
               $('#products .date').datetimepicker({
                 pickTime: false
@@ -268,7 +268,7 @@
           self.fname = $(this).attr('data-field');
           self.edited_value_field = $(this).hasClass('js-edited-value') ? $(this) : $(this).find('.js-edited-value');
           self.fprev_content = $(this).html();
-          self.fcur_content = null;  
+          self.fcur_content = null;
 
           var content = self.edited_value_field.html();
 
@@ -281,13 +281,13 @@
               });
             });
             content = categoryData;
-          }  
+          }
 
           $.ajax({
-            url: 'index.php?route=module/product_filter/createEditField&token=<?php echo $token; ?>',
+            url: 'index.php?route=extension/module/product_filter/createEditField&token=<?php echo $token; ?>',
             type: 'post',
-            data: {name: self.fname, content: content},   
-            dataType: 'json',       
+            data: {name: self.fname, content: content},
+            dataType: 'json',
             success: function(json) {
               $('#notification .warning').remove();
 
@@ -296,16 +296,16 @@
               } else if(json['error']) {
                 $('#notification').html('<div class="warning">' + json['error'] + '</div>');
               } else {
-                self.field.html(json); 
+                self.field.html(json);
                 self.showLayer();
                 self.opened = true;
                 $('#products .date').datetimepicker({
                   pickTime: false
                 });
-              }    
+              }
             }
-          }); 
-        }       
+          });
+        }
       });
 
       $('#products').on('click', '.editable .js-inline-edit-button', function(e){
@@ -328,13 +328,13 @@
             }
 
             $.ajax({
-              url: 'index.php?route=module/product_filter/updateEditField&token=<?php echo $token; ?>',
+              url: 'index.php?route=extension/module/product_filter/updateEditField&token=<?php echo $token; ?>',
               type: 'post',
-              data: {productId: productId, inputName: inputName, content: content},   
-              dataType: 'json',       
-              success: function(json) { 
+              data: {productId: productId, inputName: inputName, content: content},
+              dataType: 'json',
+              success: function(json) {
                 $('#notification .warning').remove();
-              
+
                 if(json == null) {
                   $('#notification').html('<div class="warning">Content is null</div>');
                 } else if(json['error']) {
@@ -342,7 +342,7 @@
                   $('#edit-field').parent().html(self.fprev_content);
                 } else {
                   self.fcur_content = json;
-                  $('#edit-field').parent().html(self.fcur_content);                 
+                  $('#edit-field').parent().html(self.fcur_content);
                 }
                 self.hideLayer();
               }
@@ -361,15 +361,15 @@
         var $layer = $('<div />').attr({
             'id' : 'layer'
         }).height($(document).height());
-        
+
         $('body:first').append($layer);
-        
+
         //cancel editing on click
         $layer.fadeTo(250, 0.65).click(function() {
             $('#field_cancel').click();
         });
     }
-            
+
     this.hideLayer = function() {
         $('#layer').fadeOut(500, function() {
             $('#layer').remove();
@@ -386,5 +386,5 @@
   });
 })(jQuery);
 
-//--></script> 
+//--></script>
 <?php echo $footer; ?>

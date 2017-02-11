@@ -1,5 +1,5 @@
 <?php
-class ModelModuleProductFilter extends Model {
+class ModelExtensionModuleProductFilter extends Model {
 	public function createTable() {
 		$sql_filters = 'CREATE TABLE ' . DB_PREFIX . 'advanced_product_filter(name varchar(40) primary key, type varchar(20) not null, entry_text varchar(50) not null, value varchar(50) null, options text null, autocomplete tinyint(1) not null, inline_edit tinyint(1) not null, rules integer not null, enable tinyint(1) not null, table_name varchar(30) not null, value_type varchar(10) not null, sort integer not null, alias varchar(30) not null, show_column tinyint(1) not null) ENGINE=MyISAM COLLATE=utf8_general_ci;';
 
@@ -7,7 +7,7 @@ class ModelModuleProductFilter extends Model {
 
 		if($this->db->query($sql_filters) && $this->db->query($sql_rules)) {
 
-			$this->language->load('module/product_filter');
+			$this->language->load('extension/module/product_filter');
 
 			$rules = array(
 				0 => array(
@@ -20,7 +20,7 @@ class ModelModuleProductFilter extends Model {
 									'st' => '<', //smaller than
 									'le' => '>=', //larger or equal
 									'se' => '<=', //smaller or equal
-									'neq'=> '!=' //not equal 
+									'neq'=> '!=' //not equal
 									),
 								'enable'	=> true
 								))
@@ -52,7 +52,7 @@ class ModelModuleProductFilter extends Model {
 					),
 				);
 			/*Filter fields*/
-			/*  
+			/*
 				name(name of the filter field, filter_(column_name_from_table)) =>
 					type => type of the field
 					entry_text => the name of the field which shows to user
@@ -186,7 +186,7 @@ class ModelModuleProductFilter extends Model {
 						'table_name'	=> 'url_alias',
 						'value_type'	=> 'string',
 						'sort'			=> 7
-					),*/	
+					),*/
 				'filter_date_available' => array(
 						'type'			=> 'date',
 						'entry_text'	=> $this->language->get('column_date_available'),
@@ -557,15 +557,15 @@ class ModelModuleProductFilter extends Model {
 			/*Insert rules*/
 			foreach ($rules as $id => $rule) {
 				$this->db->query("INSERT INTO " . DB_PREFIX . "advanced_product_filter_rules VALUES('" . (int)$id . "','" . $rule['type'] . "','" . $rule['rule'] . "')");
-			}	
+			}
 
 			/*Insert filter fields*/
 			foreach ($fields as $name => $field) {
 				$this->db->query("INSERT INTO " . DB_PREFIX . "advanced_product_filter VALUES('" . $name . "','" . $field['type'] . "','" . $field['entry_text'] . "','" . $field['value'] . "','" . $field['options'] . "'," . (int)$field['autocomplete'] . "," . (int)$field['inline_edit'] . "," . (int)$field['rules'] . "," . (int)$field['enable'] . ",'" . DB_PREFIX . $field['table_name'] . "','" . $field['value_type'] . "'," . (int)$field['sort'] . ",'" . (isset($field['alias']) ? $field['alias'] : substr($name, strpos($name, '_') + 1)) . "', 0)");
-			}	
+			}
 
 			$this->load->model("setting/setting");
-			$this->model_setting_setting->editSetting("advanced_product_filter", array("advanced_product_filter_paypal" => 1));	
+			$this->model_setting_setting->editSetting("advanced_product_filter", array("advanced_product_filter_paypal" => 1));
 		}
 	}
 
@@ -578,25 +578,25 @@ class ModelModuleProductFilter extends Model {
 	}
 
 	public function addFilterField($data) {
-		
+
 	}
 
 	public function addFilterFields($data) {
-		
+
 	}
 
 	public function removeFilterField($name) {
-		
+
 	}
 
 	public function removeFilterFields($data) {
-		
+
 	}
 
 	public function editFilterFields($data) {
 		$this->db->query('UPDATE ' . DB_PREFIX . 'advanced_product_filter set enable = 0, show_column = 0 where 1');
 
-		if(isset($data['status']) && is_array($data['status'])) {	
+		if(isset($data['status']) && is_array($data['status'])) {
 			foreach ($data['status'] as $key => $state) {
 				$enable = isset($state['enable']) ? 1 : 0;
 				$column = isset($state['column']) ? 1 : 0;
@@ -606,7 +606,7 @@ class ModelModuleProductFilter extends Model {
 		}
 
 		$this->load->model("setting/setting");
-		$this->model_setting_setting->editSetting("advanced_product_filter", array("advanced_product_filter_paypal" => isset($data['paypal']) ? 1 : 0));	
+		$this->model_setting_setting->editSetting("advanced_product_filter", array("advanced_product_filter_paypal" => isset($data['paypal']) ? 1 : 0));
 
 		return true;
 	}
@@ -624,14 +624,14 @@ class ModelModuleProductFilter extends Model {
 					$sql .= $this->db->escape($key) . "='" . $this->db->escape($value) . "' AND ";
 				} else {
 					$sql .= $this->db->escape($key) . "='" . $this->db->escape($value) . "'";
-				}			
-			}		
+				}
+			}
 		}
 
 		$query = $this->db->query($sql);
 
 		$rules = array();
-		if($query) {			
+		if($query) {
 			foreach ($query->rows as $key => $rule) {
 				$rules[$rule['rules_id']] = array(
 					'type' => $rule['type'],
@@ -656,8 +656,8 @@ class ModelModuleProductFilter extends Model {
 					$sql .= $this->db->escape($key) . "='" . $this->db->escape($value) . "' AND ";
 				} else {
 					$sql .= $this->db->escape($key) . "='" . $this->db->escape($value) . "'";
-				}			
-			}		
+				}
+			}
 		}
 
 		$sql .= " ORDER BY sort ASC";
@@ -712,7 +712,7 @@ class ModelModuleProductFilter extends Model {
 						'enable'		=> (boolean)$row['enable'],
 						'show_column'	=> (boolean)$row['show_column'],
 						'empty_image'	=> ($row['type'] == 'image') ? array('href' => $empty_image, 'filename' => 'no-image.png') : '',
-					); 
+					);
 			}
 		}
 
@@ -735,7 +735,7 @@ class ModelModuleProductFilter extends Model {
 		}
 
 		$table = $input->getDbTable();
-		$column = $table . "." . $input->getDbColumnName();	
+		$column = $table . "." . $input->getDbColumnName();
 
 		if($input->isTypeOf('category')) {
 			if(!$this->db->query("DELETE FROM " . $table . " WHERE product_id = " . $id)) {
@@ -754,12 +754,12 @@ class ModelModuleProductFilter extends Model {
 			$value = $value;
 		} else if($input->getDbValueType() == 'string' || $input->getDbValueType() == 'date') {*/
 		$value = $this->db->escape($value);
-		//} 			
+		//}
 
 		$where = $table . ".product_id = " . $id;
 
 		$sql = "UPDATE " . $table . " SET " . $column . " = '" . $value . "' WHERE " . $where;
-		
+
 		if(!$this->db->query($sql)) {
 			return false;
 		}
