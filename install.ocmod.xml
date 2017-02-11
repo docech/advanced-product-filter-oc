@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Advanced product filter</name>
+    <code>APF2-0</code>
+    <version>2.0</version>
+    <author>Reemon</author>
+    <file path="admin/controller/common/header.php">
+        <operation>
+            <search><![CDATA[
+            $data['product'] = $this->url->link('catalog/product', 'token=' . $this->session->data['token'] . '&filter_quantity=0', 'SSL');
+            ]]></search>
+            <add position="replace"><![CDATA[
+            $data['product'] = $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], 'SSL');
+            ]]></add>
+        </operation>
+    </file> 
+    <file path="admin/controller/common/menu.php">
+        <operation>
+            <search><![CDATA[
+            $data['product'] = $this->url->link('catalog/product', 'token=' . $this->session->data['token'], 'SSL');
+            ]]></search>
+            <add position="replace"><![CDATA[
+            $data['product'] = $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], 'SSL');
+            ]]></add>
+        </operation>
+    </file>  
+    <file path="admin/controller/catalog/product.php">
+        <operation>
+            <search><![CDATA[
+            $this->response->redirect($this->url->link('catalog/product', 'token=' . $this->session->data['token'] . $url, 'SSL'));
+            ]]></search>
+            <add position="replace"><![CDATA[
+            $this->response->redirect($this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], 'SSL'));
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            'href' => $this->url->link('catalog/product', 'token=' . $this->session->data['token'] . $url, 'SSL')
+            ]]></search>
+            <add position="replace"><![CDATA[
+            'href' => $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], 'SSL')
+            ]]></add>
+        </operation>    
+        <operation>
+            <search><![CDATA[
+            $data['cancel'] = $this->url->link('catalog/product', 'token=' . $this->session->data['token'] . $url, 'SSL');
+            ]]></search>
+            <add position="replace"><![CDATA[
+            $data['cancel'] = $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], 'SSL'); 
+            ]]></add>
+        </operation>
+    </file>  
+</modification>
