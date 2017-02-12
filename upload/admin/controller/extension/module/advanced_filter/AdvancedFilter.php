@@ -1,14 +1,14 @@
-<?php 
+<?php
 
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterRules.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterSelect.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterMultiSelect.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterText.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterCheckbox.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterImage.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterRadio.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterDate.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/FilterCategory.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterRules.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterSelect.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterMultiSelect.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterText.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterCheckbox.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterImage.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterRadio.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterDate.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/FilterCategory.php');
 
 
 class AdvancedFilter {
@@ -69,11 +69,11 @@ class AdvancedFilter {
 		switch($input['type']) {
 			case 'multiselect':
 				$inputToAdd = new FilterMultiSelect($input['name'], $input['entry_text'], '', false, $input['table_name'], $input['alias'], $input['value_type'],
-													$rule, $input['inline_edit'], $input['options']); 
+													$rule, $input['inline_edit'], $input['options']);
 				break;
 			case 'select':
 				$inputToAdd = new FilterSelect($input['name'], $input['entry_text'], '', false, $input['table_name'], $input['alias'], $input['value_type'],
-													$rule, $input['inline_edit'], $input['options']); 
+													$rule, $input['inline_edit'], $input['options']);
 				break;
 			case 'text':
 				$inputToAdd = new FilterText($input['name'], $input['entry_text'], '', false, $input['table_name'], $input['alias'], $input['value_type'],
@@ -121,7 +121,7 @@ class AdvancedFilter {
 				$this->addInput($this->columns[$input['alias']], $asColumns);
 				continue;
 			}
-			
+
 			$rule = isset($rulesArray[$input['rules']]) ? $rulesArray[$input['rules']] : false;
 
 			$inputToAdd = $this->chooseFilter($input, $rule);
@@ -166,15 +166,15 @@ class AdvancedFilter {
 			if(preg_match('/filter_\w+/', $id, $matches) && isset($matches[0])) {
 				//var_dump($value);
 				$id = $matches[0];
-				
+
 			}
 
 
 			$input = isset($this->inputs[$id]) ? $this->inputs[$id] : null;
-			
+
 			if(is_null($input)) {
 				continue;
-			} 
+			}
 
 			//Check type of actuale value($value) with type of expected value($dbValueType)
 			if($input->getDbValueType() == 'string') {
@@ -268,7 +268,7 @@ class AdvancedFilter {
 		$status = $status['filter_status'];
 
 		$this->defaultShownColumns = array(
-			'image' 	=> $this->chooseFilter($image, isset($rules[$image['rules']]) ? $rules[$image['rules']] : false), 
+			'image' 	=> $this->chooseFilter($image, isset($rules[$image['rules']]) ? $rules[$image['rules']] : false),
 			'name'  	=> $this->chooseFilter($name, isset($rules[$name['rules']]) ? $rules[$name['rules']] : false),
 			'model' 	=> $this->chooseFilter($model, isset($rules[$model['rules']]) ? $rules[$model['rules']] : false),
 			'price' 	=> $this->chooseFilter($price, isset($rules[$price['rules']]) ? $rules[$price['rules']] : false),
@@ -278,7 +278,7 @@ class AdvancedFilter {
 
 		$this->shownColumns = $this->columns = $this->defaultShownColumns;
 
-		return true;		
+		return true;
 	}
 
 	public function updateShownColumns($columns) {
@@ -329,10 +329,10 @@ class AdvancedFilter {
 
 		$filterCategorySql = '';
 		if (isset($this->inputs['filter_category_id']) && is_array($this->inputs['filter_category_id']->getValue())) {
-			$filterCategorySql = " LEFT JOIN " . DB_PREFIX . "product_to_category ON (" . DB_PREFIX . "product.product_id = " . DB_PREFIX . "product_to_category.product_id)";	
+			$filterCategorySql = " LEFT JOIN " . DB_PREFIX . "product_to_category ON (" . DB_PREFIX . "product.product_id = " . DB_PREFIX . "product_to_category.product_id)";
 		}
 
-		$where = $filterCategorySql . " WHERE " . DB_PREFIX . "product_description.language_id = '" . (int)$this->config->get('config_language_id') . "'"; 
+		$where = $filterCategorySql . " WHERE " . DB_PREFIX . "product_description.language_id = '" . (int)$this->config->get('config_language_id') . "'";
 
 		foreach ($this->inputs as $id => $input) {
 			$where .= $input->sql($autocomplete);
@@ -361,11 +361,11 @@ class AdvancedFilter {
 
 		if ($start < 0) {
 			$start = 0;
-		}				
+		}
 
 		if ($limit < 1) {
 			$limit = $this->config->get('config_admin_limit');
-		}	
+		}
 
 		$sql .= " LIMIT " . (int)$start . "," . (int)$limit;
 

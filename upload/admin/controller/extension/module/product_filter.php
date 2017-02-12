@@ -5,19 +5,19 @@
 	Email: reemon@3dshops.cz
 */
 
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/AdvancedFilter.php');
-require_once(DIR_APPLICATION . 'controller/module/advanced_filter/ProductTableBuilder.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/AdvancedFilter.php');
+require_once(DIR_APPLICATION . 'controller/extension/module/advanced_filter/ProductTableBuilder.php');
 
-class ControllerModuleProductFilter extends Controller {
+class ControllerExtensionModuleProductFilter extends Controller {
 
 	public function index() {
-		$this->language->load('module/product_filter');
+		$this->language->load('extension/module/product_filter');
 
 		$this->getSetting();
 	}
 
 	protected function getSetting() {
-		$this->load->model('module/product_filter');
+		$this->load->model('extension/module/product_filter');
 		$this->load->model('setting/setting');
 
 		$modal = false;
@@ -31,7 +31,7 @@ class ControllerModuleProductFilter extends Controller {
 				$this->request->post['paypal'] = isset($paypal['advanced_product_filter_paypal']) ? $paypal['advanced_product_filter_paypal'] : true;
 			}
 
-			if($this->model_module_product_filter->editFilterFields($this->request->post)) {
+			if($this->model_extension_module_product_filter->editFilterFields($this->request->post)) {
 				$this->session->data['success'] = $this->language->get('text_success');
 			} else {
 				$this->session->data['warning'] = $this->language->get('text_warning');
@@ -40,9 +40,9 @@ class ControllerModuleProductFilter extends Controller {
 			unset($this->session->data['advanced_filter']);
 
 			if($modal) {
-				$this->response->redirect($this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], 'SSL'));
+				$this->response->redirect($this->url->link('extension/module/product_filter/getList', 'token=' . $this->session->data['token'], 'SSL'));
 			} else {
-				$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+				$this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'], 'SSL'));
 			}
 		}
 
@@ -88,26 +88,26 @@ class ControllerModuleProductFilter extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('text_module'),
-			'href'      => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'),
+			'href'      => $this->url->link('extension/extension', 'token=' . $this->session->data['token'], 'SSL'),
 			'separator' => ' :: '
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('heading_title'),
-			'href'      => $this->url->link('module/product_filter', 'token=' . $this->session->data['token'], 'SSL'),
+			'href'      => $this->url->link('extension/module/product_filter', 'token=' . $this->session->data['token'], 'SSL'),
 			'separator' => ' :: '
 		);
 
-		$data['action'] = $this->url->link('module/product_filter', 'token=' . $this->session->data['token'], 'SSL');
+		$data['action'] = $this->url->link('extension/module/product_filter', 'token=' . $this->session->data['token'], 'SSL');
 
-		$data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
+		$data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'], 'SSL');
 
-		$data['fields'] = $this->model_module_product_filter->getFilterFields();
-		$data['rules'] = $this->model_module_product_filter->getFilterRules();
+		$data['fields'] = $this->model_extension_module_product_filter->getFilterFields();
+		$data['rules'] = $this->model_extension_module_product_filter->getFilterRules();
 
 		if($modal) {
-			$data['action'] = $this->url->link('module/product_filter', 'token=' . $this->session->data['token'].'&mode=modal', 'SSL');
-			$view = 'module/advanced_filter/product_filter_modal';
+			$data['action'] = $this->url->link('extension/module/product_filter', 'token=' . $this->session->data['token'].'&mode=modal', 'SSL');
+			$view = 'extension/module/advanced_filter/product_filter_modal';
 			$this->response->setOutput($this->load->view($view, $data));
 			return;
 		}
@@ -117,7 +117,7 @@ class ControllerModuleProductFilter extends Controller {
 		$paypal = $this->model_setting_setting->getSetting("advanced_product_filter");
 		$data['paypal_enabled'] = isset($paypal['advanced_product_filter_paypal']) ? $paypal['advanced_product_filter_paypal'] : true;
 
-		$view = 'module/advanced_filter/product_filter';
+		$view = 'extension/module/advanced_filter/product_filter';
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -128,7 +128,7 @@ class ControllerModuleProductFilter extends Controller {
 
 	public function getList() {
 		$this->language->load('catalog/product');
-		$this->language->load('module/product_filter');
+		$this->language->load('extension/module/product_filter');
 
 		$data['breadcrumbs'] = array();
 
@@ -140,7 +140,7 @@ class ControllerModuleProductFilter extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('heading_title'),
-			'href'      => $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'] . $this->filter_url, 'SSL'),
+			'href'      => $this->url->link('extension/module/product_filter/getList', 'token=' . $this->session->data['token'] . $this->filter_url, 'SSL'),
 			'last' 		=> true
 		);
 
@@ -212,14 +212,14 @@ class ControllerModuleProductFilter extends Controller {
 			$advancedFilter = new AdvancedFilter(DIR_APPLICATION);
 
 			/*Advanced filter model*/
-			$this->load->model('module/product_filter');
+			$this->load->model('extension/module/product_filter');
 			/*Load default shown columns*/
-			$advancedFilter->loadDefaultColumns($this->model_module_product_filter);
+			$advancedFilter->loadDefaultColumns($this->model_extension_module_product_filter);
 
 			/*FilterInputs fields*/
-			$inputs = $this->model_module_product_filter->getFilterFields(array('enable' => 1));
-			$columns = $this->model_module_product_filter->getFilterFields(array('show_column' => 1));
-			$rules = $this->model_module_product_filter->getFilterRules();
+			$inputs = $this->model_extension_module_product_filter->getFilterFields(array('enable' => 1));
+			$columns = $this->model_extension_module_product_filter->getFilterFields(array('show_column' => 1));
+			$rules = $this->model_extension_module_product_filter->getFilterRules();
 
 			$advancedFilter->addInputs($inputs, $rules);
 			$advancedFilter->addInputs($columns, $rules, true);
@@ -258,7 +258,7 @@ class ControllerModuleProductFilter extends Controller {
 			$this->session->data['advanced_filter'] = $advancedFilter;
 		}
 
-		$view = 'module/advanced_filter/product_list.tpl';
+		$view = 'extension/module/advanced_filter/product_list.tpl';
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
@@ -268,7 +268,7 @@ class ControllerModuleProductFilter extends Controller {
 
 	public function filterProducts() {
 		if(!$this->request->post || !isset($this->session->data['advanced_filter'])) {
-			$this->language->load('module/product_filter');
+			$this->language->load('extension/module/product_filter');
 			$this->response->setOutput(json_encode(array("error" => $this->language->get('error_filter_products'))));
 			return;
 		}
@@ -308,7 +308,7 @@ class ControllerModuleProductFilter extends Controller {
 		unset($this->request->post['page']);
 
 		if(!$advancedFilter->updateInputs($this->request->post)) {
-			$this->language->load('module/product_filter');
+			$this->language->load('extension/module/product_filter');
 			$this->response->setOutput(json_encode(array("error" => $this->language->get('error_update_filter_inputs'))));
 			return;
 		}
@@ -324,7 +324,7 @@ class ControllerModuleProductFilter extends Controller {
 
 	public function changeShownColumns() {
 		if(!$this->request->post || !isset($this->session->data['advanced_filter']) || !isset($this->request->post['columns_shown'])) {
-			$this->language->load('module/product_filter');
+			$this->language->load('extension/module/product_filter');
 			$this->response->setOutput(json_encode(array("error" => $this->language->get('error_change_shown_columns'))));
 			return;
 		}
@@ -439,7 +439,7 @@ class ControllerModuleProductFilter extends Controller {
 	/*Get list of product according to filter data*/
 	private function getListOfProducts($advancedFilter, $data) {
 		$this->load->model('catalog/product');
-		$this->load->model('module/product_filter');
+		$this->load->model('extension/module/product_filter');
 		$this->load->model('tool/image');
 
 		//Filter products
@@ -521,7 +521,7 @@ class ControllerModuleProductFilter extends Controller {
 	}
 
 	public function createEditField() {
-		$this->language->load('module/product_filter');
+		$this->language->load('extension/module/product_filter');
 
 		if(!isset($this->session->data['advanced_filter']) || !isset($this->request->post['name']) || !isset($this->request->post['content'])) {
 			$this->response->setOutput(json_encode(array("error" => $this->language->get('error_edit_field'))));
@@ -579,7 +579,7 @@ class ControllerModuleProductFilter extends Controller {
 	}
 
 	public function updateEditField() {
-		$this->language->load('module/product_filter');
+		$this->language->load('extension/module/product_filter');
 
 		if(!isset($this->session->data['advanced_filter']) || !isset($this->request->post['inputName']) || !isset($this->request->post['content']) || !isset($this->request->post['productId'])) {
 			$this->response->setOutput(json_encode(array("error" => $this->language->get('error_update_field'))));
@@ -626,11 +626,11 @@ class ControllerModuleProductFilter extends Controller {
 		//If user will change shown columns, cached products wont be returned but updated
 		$advancedFilter->enableUpdateCachedProducts();
 
-		$this->load->model('module/product_filter');
+		$this->load->model('extension/module/product_filter');
 
 		$column = $advancedFilter->getColumn($inputName);
 
-		$json = $this->model_module_product_filter->updateProduct($productId, $column, $content);
+		$json = $this->model_extension_module_product_filter->updateProduct($productId, $column, $content);
 
 		$advancedFilter->clean();
 		$this->session->data['advanced_filter'] = $advancedFilter;
@@ -657,12 +657,12 @@ class ControllerModuleProductFilter extends Controller {
 
 	public function autocomplete() {
 		if(!isset($this->session->data['advanced_filter'])) {
-			$this->language->load('module/product_filter');
+			$this->language->load('extension/module/product_filter');
 			$this->response->setOutput(json_encode(array("error" => $this->language->get('error_autocomplete'))));
 			return;
 		}
 
-		$this->load->model('module/product_filter');
+		$this->load->model('extension/module/product_filter');
 
 		$json = array();
 
@@ -698,7 +698,7 @@ class ControllerModuleProductFilter extends Controller {
 	}
 
 	private function validate() {
-		if (!$this->user->hasPermission('modify', 'module/product_filter')) {
+		if (!$this->user->hasPermission('modify', 'extension/module/product_filter')) {
 			$this->session->data['warning'] = $this->language->get('error_permission');
 			return false;
 		}
@@ -707,17 +707,17 @@ class ControllerModuleProductFilter extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('module/product_filter');
-		$this->model_module_product_filter->createTable();
+		$this->load->model('extension/module/product_filter');
+		$this->model_extension_module_product_filter->createTable();
 	}
 
 	public function uninstall() {
-		$this->load->model('module/product_filter');
+		$this->load->model('extension/module/product_filter');
 
 		unset($this->session->data['advanced_filter']);
 		$this->cache->delete('cachedFilteredProducts');
 
-		$this->model_module_product_filter->dropTable();
+		$this->model_extension_module_product_filter->dropTable();
 	}
 
 	//Dirty helper

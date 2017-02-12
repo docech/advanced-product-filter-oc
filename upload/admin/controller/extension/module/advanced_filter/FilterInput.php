@@ -1,4 +1,4 @@
-<?php 
+<?php
 	abstract class FilterInput {
 		protected $type = "none";
 		protected $id = "";
@@ -11,14 +11,14 @@
 		protected $rules = false;
 		protected $autocomplete = false;
 		protected $inlineEdit = false;
-		protected $sortable = false; 
+		protected $sortable = false;
 		private $sortChecked = false;
 
 		//Returns an html interpretation of filter input
 		abstract public function html($token, $isEven = false);
 		//Returns an html interpretation of editable input with value for inline editing
 		abstract public function editHtmlInput($id, $value);
-		
+
 		//Returns sql condition according to inner state of this object
 		public function sql($autocomplete = false) {
 			if(is_bool($this->value) && $this->value == false) {
@@ -37,7 +37,7 @@
 			$rule = FilterRules::replaceValue($rule, $this->value);
 
 			$dbFieldName = $this->dbTable . '.' . $this->dbColumnName;
-			
+
 			return " AND " . $dbFieldName . " " . $rule;
 		}
 
@@ -52,9 +52,9 @@
 			$sc .= 	"$('input[name=" . $this->id . "]').autocomplete({"
     				. "delay: 500,"
     				. "source: function(request, response) { $.ajax({"
-       				. "url: 'index.php?route=module/product_filter/autocomplete&token=" . $token . "&" . $this->id . "=' +  encodeURIComponent(request),"
+       				. "url: 'index.php?route=extension/module/product_filter/autocomplete&token=" . $token . "&" . $this->id . "=' +  encodeURIComponent(request),"
         			. "dataType: 'json',"
-        			. "success: function(json) {"   
+        			. "success: function(json) {"
 				        . "var col = '" . $this->dbColumnName . "';"
 				        . "response($.map(json, function(item) {"
 				            . "return {label: item[col], value: item.product_id}}));"
