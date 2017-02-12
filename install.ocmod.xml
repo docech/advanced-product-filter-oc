@@ -10,27 +10,27 @@
             $data['product'] = $this->url->link('catalog/product', 'token=' . $this->session->data['token'] . '&filter_quantity=0', true);
             ]]></search>
             <add position="replace"><![CDATA[
-            $data['product'] = $this->url->link('extension/module/product_filter/getList', 'token=' . $this->session->data['token'], true);
+            $data['product'] = $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], true);
             ]]></add>
         </operation>
-    </file>
-    <file path="admin/controller/common/column_left.php">
+    </file> 
+    <file path="admin/controller/common/menu.php">
         <operation>
             <search><![CDATA[
-            'href'     => $this->url->link('catalog/product', 'token=' . $this->session->data['token'], true),
+            $data['product'] = $this->url->link('catalog/product', 'token=' . $this->session->data['token'], true);
             ]]></search>
             <add position="replace"><![CDATA[
-            'href'     => $this->url->link('extension/module/product_filter/getList', 'token=' . $this->session->data['token'], true),
+            $data['product'] = $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], true);
             ]]></add>
         </operation>
-    </file>
+    </file>  
     <file path="admin/controller/catalog/product.php">
         <operation>
             <search><![CDATA[
             $this->response->redirect($this->url->link('catalog/product', 'token=' . $this->session->data['token'] . $url, true));
             ]]></search>
             <add position="replace"><![CDATA[
-            $this->response->redirect($this->url->link('extension/module/product_filter/getList', 'token=' . $this->session->data['token'], true));
+            $this->response->redirect($this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], true));
             ]]></add>
         </operation>
         <operation>
@@ -38,16 +38,16 @@
             'href' => $this->url->link('catalog/product', 'token=' . $this->session->data['token'] . $url, true)
             ]]></search>
             <add position="replace"><![CDATA[
-            'href' => $this->url->link('extension/module/product_filter/getList', 'token=' . $this->session->data['token'], true)
+            'href' => $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], true)
             ]]></add>
-        </operation>
+        </operation>    
         <operation>
             <search><![CDATA[
             $data['cancel'] = $this->url->link('catalog/product', 'token=' . $this->session->data['token'] . $url, true);
             ]]></search>
             <add position="replace"><![CDATA[
-            $data['cancel'] = $this->url->link('extension/module/product_filter/getList', 'token=' . $this->session->data['token'], true);
+            $data['cancel'] = $this->url->link('module/product_filter/getList', 'token=' . $this->session->data['token'], true); 
             ]]></add>
         </operation>
-    </file>
+    </file>  
 </modification>
