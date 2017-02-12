@@ -1,2 +1,2 @@
 Master branch
--branch for creating new versions
+-tracking the newest version(currently 1.23 for oc 2.3.0.2)
